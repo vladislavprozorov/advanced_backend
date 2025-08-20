@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS", // стандарт для Node.js
+    "moduleResolution": "node",
+    "outDir": "./dist", // куда будет собираться JS
+    "rootDir": "./src", // где исходники TS
+    "strict": true, // строгая типизация
+    "esModuleInterop": true, // корректный импорт express
+    "skipLibCheck": true, // ускоряет сборку
+    "forceConsistentCasingInFileNames": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
