@@ -62,6 +62,16 @@ app.use(limiter);
 
 app.use(morgan('dev'));
 
+const handleServerShutdown = async () => {
+  try {
+    console.log('Server shutdown');
+    process.exit(0);
+  } catch (err) {
+    console.log('Error during server shutdown', err);
+  }
+};
+process.on('SIGINT', handleServerShutdown);
+process.on('SIGTERM', handleServerShutdown);
 (async () => {
   try {
     app.use('/api/v1', v1Routes);
