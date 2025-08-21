@@ -72,6 +72,7 @@ const handleServerShutdown = async () => {
 };
 process.on('SIGINT', handleServerShutdown);
 process.on('SIGTERM', handleServerShutdown);
+console.log('ok');
 (async () => {
   try {
     app.use('/api/v1', v1Routes);
