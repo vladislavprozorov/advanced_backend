@@ -75,10 +75,6 @@ process.on('SIGTERM', handleServerShutdown);
 
 console.log('ok');
 
-function saveITems() {
-  return;
-}
-
 (async () => {
   try {
     app.use('/api/v1', v1Routes);
