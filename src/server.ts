@@ -14,7 +14,7 @@ const morgan = require('morgan');
  */
 import config from '@/config';
 import limiter from '@/lib/express_rate_limit';
-const sequelize = require('./config/database');
+import { connectToDatase, disconnectFromDatabase } from '@/lib/mongoose';
 /**
  * Router
  */
@@ -64,6 +64,7 @@ app.use(morgan('dev'));
 
 const handleServerShutdown = async () => {
   try {
+    await disconnectFromDatabase();
     console.log('Server shutdown');
     process.exit(0);
   } catch (err) {
@@ -75,9 +76,9 @@ process.on('SIGTERM', handleServerShutdown);
 
 (async () => {
   try {
+    await connectToDatase();
     app.use('/api/v1', v1Routes);
-    await sequelize.authenticate(); // Подключение к БД
-    await sequelize.sync();
+
     app.listen(config.PORT, () =>
       console.log(`Server start at port ${config.PORT}`),
     );

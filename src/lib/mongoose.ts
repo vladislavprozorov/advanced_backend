@@ -22,3 +22,34 @@ const clientOptions: ConnectOptions = {
     deprecationErrors: true,
   },
 };
+export const connectToDatase = async (): Promise<void> => {
+  if (!config.MONGO_URI) {
+    throw new Error('MongoDB URI is not defined in the configuration');
+  }
+  try {
+    await mongoose.connect(config.MONGO_URI, clientOptions);
+    console.log('Connect to the database succesfully!', {
+      uri: config.MONGO_URI,
+      options: clientOptions,
+    });
+  } catch (err) {
+    if (err instanceof Error) {
+      throw err;
+    }
+    console.log('Error connecting to the database', err);
+  }
+};
+export const disconnectFromDatabase = async (): Promise<void> => {
+  try {
+    await mongoose.disconnect();
+    console.log('Disconnected from database succesfully', {
+      uri: config.MONGO_URI,
+      options: clientOptions,
+    });
+  } catch (err) {
+    if (err instanceof Error) {
+      throw new Error(err.message);
+    }
+    console.log('Error disconnecting from database', err);
+  }
+};
