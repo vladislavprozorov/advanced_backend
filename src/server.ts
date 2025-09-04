@@ -15,6 +15,7 @@ const morgan = require('morgan');
 import config from '@/config';
 import limiter from '@/lib/express_rate_limit';
 import { connectToDatase, disconnectFromDatabase } from '@/lib/mongoose';
+import { logger } from '@/lib/winston';
 /**
  * Router
  */
@@ -40,7 +41,7 @@ const corsOptions: CorsOptions = {
       callback(null, true);
     } else {
       callback(new Error(`CORS Error ${origin} is not allowed by CORS`), false);
-      console.log(`CORS Error ${origin} is not allowed by CORS`);
+      logger.warn(`CORS Error ${origin} is not allowed by CORS`);
     }
   },
 };
@@ -65,10 +66,10 @@ app.use(morgan('dev'));
 const handleServerShutdown = async () => {
   try {
     await disconnectFromDatabase();
-    console.log('Server shutdown');
+    logger.warn('Server shutdown');
     process.exit(0);
   } catch (err) {
-    console.log('Error during server shutdown', err);
+    logger.error('Error during server shutdown', err);
   }
 };
 process.on('SIGINT', handleServerShutdown);
@@ -80,10 +81,10 @@ process.on('SIGTERM', handleServerShutdown);
     app.use('/api/v1', v1Routes);
 
     app.listen(config.PORT, () =>
-      console.log(`Server start at port ${config.PORT}`),
+      logger.info(`Server start at port ${config.PORT}`),
     );
   } catch (error) {
-    console.error(`Ошибка при подключении базы данных!`, error);
+    logger.error(`Ошибка при подключении базы данных!`, error);
     if (config.NODE_ENV === 'production') {
       process.exit(1);
     }
